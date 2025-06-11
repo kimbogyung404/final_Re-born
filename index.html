@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Re:born</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: #171D24;
+      font-family: 'Pretendard', sans-serif;
+      color: #ffffff;
+      scroll-behavior: smooth;
+    }
+    header {
+      position: fixed;        
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;            
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px 24px 120px;
+  background-color: #171D24;  /
+    }
+    .nav {
+      display: flex;
+      gap: 24px;
+      margin-right: 48px;
+    }
+    .nav a {
+  color: #676F7B;
+  transition: color 0.3s;
+}
+.nav a.active,
+.nav a:hover {
+  color: #ffffff;
+}
+
+    .header-line {
+      height: 1px;
+      background-color: #2A333B;
+      width: 100%;
+    }
+
+    .hero {
+      display: none;
+      text-align: center;
+      margin-top: 32px;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-size: 33px;
+      font-weight: 700;
+      margin-bottom: 6px;
+       text-align: center;
+    
+    }
+    p {
+      font-size: 18px;
+      font-weight: 600;
+      color: #676F7B;
+      line-height: 1.3;
+      white-space: pre-line;
+      margin-bottom: 20px;
+       text-align: center;
+    }
+    body {
+  padding-top: 96px;
+}
+    .bead {
+      margin-top: 16px;
+      position: relative;
+      display: inline-block;
+    }
+    .bead-glow {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: #F78CBA;
+      filter: blur(60px);
+      opacity: 0.8;
+      z-index: 0;
+    }
+    .bead:hover .bead-glow {
+      display: block;
+    }
+    .bead-circle {
+      width: 410px;
+      height: 410px;
+      border-radius: 50%;
+      background-image: url('Bead.png');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .bead-text,
+    .bead-subtext {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Pretendard', sans-serif;
+      color: rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .bead-text { top: 47%; font-size: 26px; font-weight: 700; }
+    .bead-subtext { top: 60%; font-size: 15px; font-weight: 500; }
+    .preview-columns {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 32px;
+    }
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .preview-thumb {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background-color: #444;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 0 8px rgba(0,0,0,0.4);
+      cursor: grab;
+    }
+    .bead-circle .preview-thumb {
+      width: 100px;
+      height: 100px;
+      opacity: 0.3;
+      position: absolute;
+      z-index: 3;
+      pointer-events: all;
+      cursor: pointer;
+    }
+    .upload-wrapper {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .upload-button {
+      font-size: 18px;
+      color: #676F7B;
+      font-weight: 500;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    #uploadCount {
+      font-size: 14px;
+      color: #676F7B;
+    }
+    .cta-button {
+      width: 160px;
+      height: 44px;
+      border: none;
+      border-radius: 14px;
+      background-color: #978BFF;
+      color: white;
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 40px;
+    }
+    .cta-button:hover {
+  background-color: #5C4EDC;
+}
+
+    #section-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+    }
+    .image-grid {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: -30px;
+      margin-bottom: 10px;
+    }
+    .circle-image {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 0 12px rgba(0,0,0,0.3);
+      margin-top: 60px;
+    }
+    .circle-image.selected {
+      border: 1px solid #978BFF;
+    }
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.input-wrapper input {
+  width: 400px;
+  height: 50px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #ffffff; 
+  background-color: #2A333B; 
+  border: 1px solid #2A333B;
+  border-radius: 12px;
+  padding: 0 20px;
+  outline: none;
+  transition: border 0.3s ease;
+  text-align: left;
+}
+
+.input-wrapper input:focus {
+  border: 2px solid #978BFF;
+  color: #ffffff; 
+}
+
+.input-wrapper input::placeholder {
+  color: #A1A6B5; 
+  font-weight: 500;
+}
+
+.write-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;  
+  align-items: center;      
+  gap: 100px;              
+  margin-top: 40px;
+  width: 100%;
+  height: auto;            
+
+.thumbnail-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.image-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.image-thumb {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.image-thumb.active {
+  opacity: 1;
+  border: 2px solid #978BFF;
+}
+
+.image-index {
+  color: #676F7B;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.text-column {
+  width: 500px;
+}
+
+.text-box {
+  background-color: #2A333B;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.text-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: white;
+  align-items: center;
+}
+
+textarea#photoText {
+  width: 100%;
+  height: 200px;
+  resize: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  padding-top: 0px;
+  position: relative;
+  top: -10px;
+  display: block;
+}
+
+.char-counter {
+  text-align: right;
+  font-size: 14px;
+  color: #676F7B;
+  margin-top: 4px;
+}
+
+.cta-button.small {
+  height: 36px;
+  width: 80px;
+  font-size: 14px;
+  border-radius: 12px;
+margin-top: -6px;
+}
+.cta-button.small:hover {
+  background-color: #5C4EDC;
+}
+
+#section-write {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 0px !important;
+  margin-top: -20 !important;
+}
+
+.write-wrapper {
+  margin-top: 0 !important;   
+}
+.write-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  gap: 60px;
+  margin-top: -40px;
+}
+
+.preview-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px; 
+}
+
+.side-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; 
+}
+
+.preview-circle {
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  border: 1px solid #2A333B;
+  position: relative;
+  overflow: hidden;
+}
+.preview-circle.circle-small {
+  width: 120px;
+  height: 120px;
+}
+.preview-circle.circle-large {
+  width: 180px;
+  height: 180px;
+}
+.preview-circle.circle-small::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(18, 18, 18, 0.5);
+  border-radius: 50%;
+}
+
+.preview-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.arrow-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.indicator-number {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.indicator-current {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #978BFF;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.current-icon {
+  width: 6px;
+  height: 10px;
+}
+
+.arrival-box {
+  border: 4px solid transparent;
+  background-color: #2A333B; 
+  transition: all 0.3s ease;
+}
+
+.arrival-box.selected {
+  border-color: #978BFF;
+  background-color: #978BFF; 
+
+.arrival-box.selected .arrival-title,
+.arrival-box.selected .arrival-subtext {
+  color: white; 
+}
+
+.scroll-fade {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.scroll-fade.visible {
+  opacity: 1;
+}
+
+#section-intro h1:first-of-type {
+  margin-bottom: 120px; 
+}
+
+
+.section-intro-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: 30px;
+  margin-top: 60px;
+}
+.intro-text,
+.intro-heading {
+  text-align: center; 
+}
+
+
+.section-intro-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+  
+  .icon-img {
+    width: 120px !important;
+    height: 120px !important;
+  }
+  .section-intro-flow {
+    max-width: 1200px !important;
+    width: 100%;
+  }
+  #section-intro-down img {
+    max-width: 100%;
+    height: auto;
+  }
+
+
+
+</style>
+
+
+
+  
+</head>
+<body>
+  <header>
+    <img src="Logo.jpg" alt="Logo" height="32" />
+    <nav class="nav">
+  <a href="#" onclick="showOnly('section-intro')">서비스 소개</a>
+  <a href="#" class="active" onclick="showOnly('section-preview')">서비스 체험</a>
+</nav>
+  </header>
+  <div class="header-line"></div>
+
+<section id="section-intro-top" style="
+  position: relative;
+  background-image: url('Background 12.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #171D24;
+  padding: 100px 20px 120px;
+  min-height: 100vh;
+">
+  <h1 style="
+    position: absolute;
+    top: 30%;
+    left: 10%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 44px;
+    font-weight: 700;
+    font-family: 'Pretendard', sans-serif;
+    line-height: 1.6;
+    text-align: left;
+    max-width: 600px;
+  ">
+    당신의 이야기가 <br>끝나지 않도록
+  </h1>
+</section>
+
+<section id="section-intro-down" style="
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #171D24, #582C7D);
+  padding: 100px 20px 120px;
+  text-align: center;
+  font-family: 'Pretendard', sans-serif;
+  color: white;
+">
+  <div style="width: 100%; max-width: 760px; display: flex; flex-direction: column; align-items: center;">
+
+    <img src="hand.png" alt="hand" style="width: 200px; height: auto; margin-bottom: 50px;" />
+
+    <p style="font-size: 18px; font-weight: 500; line-height: 1.6; margin-bottom: 300px;">
+      우리는 늘 갑작스러운 죽음 앞에<br>준비되지 않았다고 느낍니다
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 80px;">
+      <img src="OP1.png" alt="op1" style="width: 300px; height: 300px; border-radius: 50%;" />
+      <img src="OP2.png" alt="op2" style="width: 300px; height: 300px; border-radius: 50%;" />
+    </div>
+
+    <h1 style="font-size: 28px; font-weight: 700; line-height: 1.6; margin-bottom: 400px;">
+      죽음 이후에도 이어질 수 있는 연결이 있다면,<br>이별은 조금 더 따뜻해질 수 있지 않을까요?
+    </h1>
+
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 30px; margin-bottom: 80px;">
+      <img src="voice.png" alt="voice" style="width: 300px; height: 300px;" />
+      <img src="shape.png" alt="shape" style="width: 300px; height: 300px;" />
+      <img src="trace.png" alt="trace" style="width: 300px; height: 300px;" />
+    </div>
+
+    <img src="Beads.png" alt="beads" style="width: 680px; height: auto; margin-bottom: 50px;" />
+
+    <h1 style="font-size: 28px; font-weight: 700; line-height: 1.6; margin-bottom: -8px;">
+      모두 다 담겨<br>조금씩 열어보는 하나의 선물처럼 남기를
+    </h1>
+
+    <p style=" color:#ffffff; font-size: 18px; font-weight: 500; line-height: 1.6;">
+      서비스 체험에서 Re:born을 직접 이용해보세요
+    </p>
+
+  </div>
+</section>
+
+
+
+ <section id="section-preview">
+  <h1 >누구에게 전달할 마지막 선물인가요?</h1>
+  <p >소중한 메시지가 정확히 전달되록 이메일을 올바르게 적어주세요</p>
+
+  <div class="image-grid">
+    <div class="circle-image" style="background-image: url('1-1.png');" data-original="url('1-1.png')" onclick="selectImage(this, '1.png')"></div>
+    <div class="circle-image" style="background-image: url('1-2.png');" data-original="url('1-2.png')" onclick="selectImage(this, '2.png')"></div>
+    <div class="circle-image" style="background-image: url('1-3.png');" data-original="url('1-3.png')" onclick="selectImage(this, '3.png')"></div>
+    <div class="circle-image" style="background-image: url('1-4.png');" data-original="url('1-4.png')" onclick="selectImage(this, '4.png')"></div>
+  </div>
+
+  <div class="input-wrapper">
+    <input type="text" placeholder="이름을 입력해주세요">
+    <input type="email" placeholder="이메일을 입력해주세요">
+  </div>
+
+  <button id="1NextButton" class="cta-button" onclick="goToHero()">입력 완료</button>
+</section>
+
+  <section id ="hero" class="hero">
+  <h1>정성스럽게 선물을 골라보세요</h1>
+  <p>당신이 남긴 사진이 누군가에겐 오래도록 꺼내 보는 선물이 될 수 있어요.</p>
+ <div class="bead" id="dropZone">
+  <div class="bead-glow"></div>
+  <div class="bead-circle" id="beadCircle">
+    <span class="bead-text" id="beadText">추억을 담아보세요</span>
+    <div class="bead-subtext" id="beadSubText">Drag Here</div>
+  </div>
+</div>
+
+<div class="upload-wrapper">
+  <p id="uploadCount">0 / 8장 업로드됨</p>
+  <button id="2NextButton" class="cta-button" onclick="goToWriteAndArrival()" style="display: none;">다음</button>
+</div>
+</section>
+
+
+<section id="section-write" style="display: none; flex-direction: column; align-items: center; padding: 60px 0px; margin-top: 24px;">
+
+  <div class="write-wrapper">
+    <h1 >선물에 전달할 이야기를 남겨보세요</h1>
+    <p >한 장의 사진에 담긴 마음을 천천히 풀어내 보세요.</p>
+
+    <div class="write-container">
+      
+      <div class="preview-wrapper">
+        <div class="side-preview"></div>
+        <div class="preview-indicator">
+  <img src="Up.svg" alt="up" class="arrow-icon" />
+  <div class="indicator-number" id="indicatorUp">1/8</div>
+  <div class="indicator-current" id="indicatorCurrent">
+    <img src="Arrow.svg" alt="arrow" class="current-icon" />
+    <span>2/8</span>
+  </div>
+  <div class="indicator-number" id="indicatorDown">3/8</div>
+  <img src="Down.svg" alt="down" class="arrow-icon" />
+</div>
+
+      </div>
+
+      
+      <div class="text-column">
+        <div class="text-box">
+          <div class="text-header">
+            <span id="currentImageLabel" style="font-size: 18px;">2번째 사진</span>
+            <button class="cta-button small">저장하기</button>
+          </div>
+          <textarea id="photoText" placeholder="이야기를 입력해주세요" maxlength="500"></textarea>
+          <div class="char-counter">
+            <span id="charCount">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+ </div>
+</section>
+
+<img src="arrow2.svg" alt="arrow" id="surveyArrow" style="display: none; width: 20px; margin: -30px auto -4px;" />
+
+
+<p id="surveyNotice" style="display: none; text-align: center; color: #A1A6B5; font-size: 16px; font-weight: 500;   margin: -16px 0 -4px 0;">
+  하단의 질문이 계속 있어요
+</p>
+
+
+<section id="section-arrival" style="display: none; flex-direction: column; align-items: center; padding: 60px 0px; margin-top: 24px;">
+
+
+  <h1>마지막 순간 이후, 언제 선물을 전송할까요?</h1>
+  <p >
+    Re:born은 네이버와 연동하여 사망선고일 접수를 기준으로,
+    사용자가 선택한 시점(이틀·1주·1개월·2개월 후)에 마지막 메시지를 전송합니다.
+  </p>
+
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;">
+
+  <div class="arrival-box"  onclick="selectArrival(this)"
+       style="width: 360px; background-color: #2A333B; border-radius: 20px; padding: 24px;
+              display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+              border: 4px solid transparent;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="font-size: 18px; font-weight: 700; color: white;">이틀 후 도착</div>
+      <div style="font-size: 14px; font-weight: 500; color: #F2F3F6; line-height: 1.4;">
+        갑작스러운 이별 뒤,<br>장례를 준비 중인 이들에게
+      </div>
+    </div>
+    <img src="1hour.png" alt="icon" style="width: 48px; height: 48px;" />
+  </div>
+
+  <div class="arrival-box" onclick="selectArrival(this)"
+       style="width: 360px; background-color: #2A333B; border-radius: 20px; padding: 24px;
+              display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+              border: 4px solid transparent;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="font-size: 18px; font-weight: 700; color: white;">일주일 후 도착</div>
+      <div style="font-size: 14px; font-weight: 500; color: #F2F3F6; line-height: 1.4;">
+        조용히 밀려오는 허전함을 느낄 이들에게
+      </div>
+    </div>
+    <img src="2hour.png" alt="icon" style="width: 48px; height: 48px;" />
+  </div>
+
+  <div class="arrival-box" onclick="selectArrival(this)"
+       style="width: 360px; background-color: #2A333B; border-radius: 20px; padding: 24px;
+              display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+              border: 4px solid transparent;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="font-size: 18px; font-weight: 700; color: white;">1달 후 도착</div>
+      <div style="font-size: 14px; font-weight: 500; color: #F2F3F6; line-height: 1.4;">
+        시간이 지나도 여전히 생각나는 이들에게
+      </div>
+    </div>
+    <img src="3hour.png" alt="icon" style="width: 48px; height: 48px;" />
+  </div>
+
+  <div class="arrival-box" onclick="selectArrival(this)"
+       style="width: 360px; background-color: #2A333B; border-radius: 20px; padding: 24px;
+              display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+              border: 4px solid transparent;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <div style="font-size: 18px; font-weight: 700; color: white;">3달 후 도착</div>
+      <div style="font-size: 14px; font-weight: 500; color: #F2F3F6; line-height: 1.4;">
+        주변은 일상으로 돌아갔지만 <br>여전히 그 자리에 머무는 이들에게
+      </div>
+    </div>
+    <img src="30min.png" alt="icon" style="width: 48px; height: 48px;" />
+  </div>
+
+</div>
+<button id="arrivalNextButton" class="cta-button" onclick="goToConfirm(document.querySelector('input[type=text]').value)" >다음</button>
+</section>
+
+<section id="section-confirm"
+  style="display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
+
+  
+  <div style="text-align: center; padding: 60px 20px 40px;">
+    <h1 id="confirmTitle" style="font-size: 33px; font-weight: 700; color: white;">이름 자리</h1>
+    <p style="font-size: 18px; color: #676F7B; margin-top: -14px;">
+      선물이 잘 전달될 수 있도록 마지막으로 내용을 확인해주세요
+    </p>
+    <div style="position: relative; width: 380px; height: 380px; margin: 20px auto 60px;">
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                  width: 360px; height: 360px; border-radius: 50%; background: #F78CBA;
+                  filter: blur(60px); opacity: 0.8; z-index: 0;"></div>
+      <img src="Bead2.svg" alt="Bead Preview" style="position: relative; z-index: 1; width: 100%;" />
+    </div>
+    <img src="arrow2.svg" alt="Scroll down" style="width: 20px; margin-top: -40px; margin-bottom: 4px;" />
+    <p style="color: #A1A6B5; font-size: 16px; font-weight: 500; margin-top: -20px;">
+      아래로 스크롤 해주세요
+    </p>
+  </div>
+
+  <div id="scene1" style="width: 100%; height: 100vh; position: relative; opacity: 0; transition: opacity 1s ease-in;">
+    <img src="11.jpg" alt="Stage 1"
+         style="position: absolute; width: 100%; height: 100%; object-fit: cover; top: 0; left: 0; z-index: 0;" />
+    <div style="position: relative; z-index: 1; height: 100%;
+                display: flex; align-items: center; justify-content: center;">
+      <h1 style="font-size: 32px; color: white; text-align: center;">
+        고인이 지나간 자리에
+      </h1>
+    </div>
+  </div>
+
+
+  <div id="scene2" style="width: 100%; height: 100vh; position: relative; opacity: 0; transition: opacity 1s ease-in;">
+    <img src="12.jpg" alt="Stage 2"
+         style="position: absolute; width: 100%; height: 100%; object-fit: cover; top: 0; left: 0; z-index: 0;" />
+    <div style="position: relative; z-index: 1; height: 100%;
+                display: flex; align-items: center; justify-content: center;">
+      <h1 id="finalMessage" style="font-size: 32px; color: white; text-align: center;">
+        고인이 지나간 자리에<br>OOO에게 따뜻한 선물이 남았어요
+      </h1>
+    </div>
+  </div>
+</section>
+
+
+<section id="section-simulate" style="
+  position: relative;
+  display: none;
+  background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcG5iNXMzNjA4ZGJmbnRwYnRydnpzMGo3N3VmdjNmYzF0anhlcGI4bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/y9s5ybJoWEUznNGi51/giphy.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 60px 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+">
+
+  <div style="
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(18, 18, 18, 0.2);
+    z-index: 0;
+  "></div>
+
+  
+  <div style="text-align: center; margin-bottom: 40px; position: relative; z-index: 1;">
+    <h1 id="simulateTitle" style="font-size: 33px; font-weight: 700; color: white; margin-top: 16px;">
+      마지막 순간이 오기 전, 정성껏 골라 담은 추억을 선물하셨어요
+    </h1>
+  </div>
+
+  <div class="write-container" style="position: relative; z-index: 1;">
+    <div class="preview-wrapper">
+      <div class="side-preview" id="simulatePreview"></div>
+      <div class="preview-indicator">
+        <img src="Up.svg" alt="up" class="arrow-icon" />
+        <div class="indicator-number" id="simulateIndicatorUp">1/8</div>
+        <div class="indicator-current">
+          <img src="Arrow.svg" alt="arrow" class="current-icon" />
+          <span id="simulateIndicatorCurrent">2/8</span>
+        </div>
+        <div class="indicator-number" id="simulateIndicatorDown">3/8</div>
+        <img src="Down.svg" alt="down" class="arrow-icon" />
+      </div>
+    </div>
+
+    
+    <div class="text-column">
+      <div class="text-box">
+        <div class="text-header">
+          <span id="simulateImageLabel" style="font-size: 18px;">2번째 사진</span>
+        </div>
+        <div id="simulateText" style="font-size: 16px; color: white; line-height: 1.6; white-space: pre-line; word-break: keep-all; margin-top: 10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  
+  <button id="simulateNextButton" class="cta-button" onclick="goToEnd()" style="margin-top: 60px; display: none; position: relative; z-index: 1;">내용 확인 완료</button>
+</section>
+
+<section id="section-end" style="
+  display: none;
+  background-image: url('Background 12.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 120px 100px;
+  flex-direction: column;  
+">
+
+  <h1 style="
+    color: white;
+    font-size: 36px;
+    max-width: 600px;
+    line-height: 1.6;
+    text-align: left; 
+  ">
+    갑작스러운 이별의 순간<br>대신 마지막 선물을 전달할게요
+  </h1>
+  <p >다정한 작별인사 곁에는 Re:born이 함께 합니다. </p>
+</section>
+
+
+<script>
+  function showOnly(targetId) {
+  const allSections = document.querySelectorAll('section');
+  allSections.forEach(section => section.style.display = 'none');
+
+  if (targetId === 'section-intro') {
+    document.getElementById('section-intro-top').style.display = 'flex';
+    document.getElementById('section-intro-down').style.display = 'flex';
+  } else {
+    const target = document.getElementById(targetId);
+    if (target) target.style.display = 'flex';
+  }
+
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  if (targetId === 'section-intro') {
+    document.querySelector('.nav a:nth-child(1)')?.classList.add('active');
+  } else if (targetId === 'section-preview') {
+    document.querySelector('.nav a:nth-child(2)')?.classList.add('active');
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const beadImages = [];
+    let currentIndex = 0;
+    const imageTexts = [];
+    let selectedArrivalText = '';
+
+    const beadCircle = document.getElementById('beadCircle');
+    const beadText = document.getElementById('beadText');
+    const beadSubText = document.getElementById('beadSubText');
+    const nextButton = document.getElementById('2NextButton');
+    const textarea = document.getElementById('photoText');
+    const counter = document.getElementById('charCount');
+    const saveButton = document.querySelector('.cta-button.small');
+    const currentImageLabel = document.getElementById('currentImageLabel');
+    const sidePreview = document.querySelector('.side-preview');
+    const surveyNotice = document.getElementById('surveyNotice');
+    const surveyArrow = document.getElementById('surveyArrow');
+
+    
+    showOnly('section-intro');
+
+    
+    window.goToHero = function () {
+      showOnly('hero');
+    };
+
+    window.goToWriteAndArrival = function () {
+      showOnly('section-write');
+      document.getElementById('section-arrival').style.display = 'flex';
+      if (surveyNotice) surveyNotice.style.display = 'block';
+      if (surveyArrow) surveyArrow.style.display = 'block';
+    };
+
+    window.goToConfirm = function (nameInput) {
+      ['section-write', 'section-arrival', 'surveyArrow', 'surveyNotice'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+
+      const confirmSection = document.getElementById('section-confirm');
+      const simulateSection = document.getElementById('section-simulate');
+      confirmSection.style.display = 'flex';
+      simulateSection.style.display = 'none';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      document.getElementById('confirmTitle').innerText = `${nameInput}님께 마지막 순간 이후, 선물을 전달할게요`;
+      document.getElementById('finalMessage').innerHTML = `고인이 지나간 자리에<br>${nameInput}에게 따뜻한 선물이 남았어요`;
+
+      setTimeout(() => {
+        const scene1 = document.getElementById('scene1');
+        const scene2 = document.getElementById('scene2');
+        if (scene1 && scene2) {
+          scene1.style.opacity = '1';
+          setTimeout(() => scene2.style.opacity = '1', 1000);
+          setTimeout(() => {
+            simulateSection.style.display = 'flex';
+            simulateSection.style.flexDirection = 'column';
+            simulateSection.style.alignItems = 'center';
+            simulateSection.style.justifyContent = 'center';
+
+            const simulateButton = document.getElementById('simulateNextButton');
+            if (simulateButton) simulateButton.style.display = 'inline-block';
+
+            currentIndex = 0;
+            updateAllPreviews();
+          }, 4000);
+        }
+      }, 500);
+    };
+
+    window.goToSimulate = function () {
+      showOnly('section-simulate');
+    };
+
+    window.goToEnd = function () {
+      showOnly('section-end');
+    };
+
+    
+    function updateAllPreviews() {
+      updateThumbnailPreview();
+      updateIndicatorUI();
+      updateSimulateText();
+      updateSectionWriteIndicator();
+      if (textarea) {
+        textarea.value = imageTexts[currentIndex] || "";
+        counter.textContent = `${textarea.value.length}/500`;
+      }
+      if (currentImageLabel) {
+        currentImageLabel.textContent = `${currentIndex + 1}번째 사진`;
+      }
+    }
+
+    function updateSectionWriteIndicator() {
+      const total = beadImages.length;
+      const up = document.getElementById('indicatorUp');
+      const current = document.getElementById('indicatorCurrent')?.querySelector('span');
+      const down = document.getElementById('indicatorDown');
+      if (!up || !current || !down) return;
+      up.textContent = currentIndex > 0 ? `${currentIndex}/${total}` : '';
+      current.textContent = `${currentIndex + 1}/${total}`;
+      down.textContent = currentIndex < total - 1 ? `${currentIndex + 2}/${total}` : '';
+    }
+
+    function updateThumbnailPreview() {
+      const simulatePreview = document.getElementById('simulatePreview');
+      const sidePreview = document.querySelector('.side-preview');
+      if (!simulatePreview || !sidePreview) return;
+      simulatePreview.innerHTML = '';
+      sidePreview.innerHTML = '';
+      for (let i = 0; i < 3; i++) {
+        const idx = currentIndex - 1 + i;
+        const circle = document.createElement('div');
+        circle.className = `preview-circle ${i === 1 ? 'circle-large' : 'circle-small'}`;
+        if (idx >= 0 && idx < beadImages.length) {
+          circle.style.backgroundImage = beadImages[idx].el.style.backgroundImage;
+        } else {
+          circle.style.backgroundColor = '#2A333B';
+        }
+        simulatePreview.appendChild(circle);
+        sidePreview.appendChild(circle.cloneNode(true));
+      }
+    }
+
+    function updateIndicatorUI() {
+      const up = document.getElementById('simulateIndicatorUp');
+      const down = document.getElementById('simulateIndicatorDown');
+      const current = document.getElementById('simulateIndicatorCurrent');
+      const total = beadImages.length;
+      if (!up || !down || !current) return;
+      up.textContent = currentIndex > 0 ? `${currentIndex}/${total}` : '';
+      down.textContent = currentIndex < total - 1 ? `${currentIndex + 2}/${total}` : '';
+      current.textContent = `${currentIndex + 1}/${total}`;
+    }
+
+    function updateSimulateText() {
+      const text = document.getElementById('simulateText');
+      const label = document.getElementById('simulateImageLabel');
+      if (!text || !label) return;
+      text.textContent = imageTexts[currentIndex] || '';
+      label.textContent = `${currentIndex + 1}번째 사진`;
+    }
+
+    window.selectImage = function (el, newSrc) {
+      document.querySelectorAll('.circle-image').forEach(img => {
+        img.classList.remove('selected');
+        img.style.border = '1px solid transparent';
+        const original = img.getAttribute('data-original');
+        if (original) img.style.backgroundImage = original;
+      });
+      el.classList.add('selected');
+      el.style.border = '1px solid #978BFF';
+      el.style.backgroundImage = `url('${newSrc}')`;
+    };
+
+    window.selectArrival = function (el) {
+      document.querySelectorAll('.arrival-box').forEach(box => {
+        box.classList.remove('selected');
+        box.style.backgroundColor = '#2A333B';
+      });
+      el.classList.add('selected');
+      el.style.backgroundColor = '#978BFF';
+      selectedArrivalText = el.querySelector('div')?.innerText.trim();
+    };
+
+    beadCircle?.addEventListener('dragover', e => {
+      e.preventDefault();
+      beadCircle.style.outline = '2px dashed rgba(255,255,255,0.4)';
+    });
+
+    beadCircle?.addEventListener('dragleave', () => {
+      beadCircle.style.outline = 'none';
+    });
+
+    beadCircle?.addEventListener('drop', e => {
+      e.preventDefault();
+      beadCircle.style.outline = 'none';
+
+      const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+      if (beadImages.length >= 8) {
+        alert("최대 8장까지만 업로드할 수 있어요.");
+        return;
+      }
+
+      const availableSlots = 8 - beadImages.length;
+      files.slice(0, availableSlots).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const radius = 205;
+          const thumbRadius = 50;
+          let valid = false, x, y, attempts = 0;
+
+          while (!valid && attempts < 100) {
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = Math.random() * (radius - thumbRadius);
+            x = 205 + Math.cos(angle) * distance;
+            y = 205 + Math.sin(angle) * distance;
+            valid = beadImages.every(img => {
+              const dx = img.x - x, dy = img.y - y;
+              return Math.sqrt(dx * dx + dy * dy) > thumbRadius * 2;
+            });
+            attempts++;
+          }
+          if (!valid) return;
+
+          const dropped = document.createElement('div');
+          dropped.className = 'preview-thumb';
+          dropped.style.backgroundImage = `url('${event.target.result}')`;
+          dropped.style.left = `${x}px`;
+          dropped.style.top = `${y}px`;
+          dropped.style.transform = 'translate(-50%, -50%)';
+          dropped.style.position = 'absolute';
+
+          dropped.addEventListener('click', () => {
+            const idx = beadImages.findIndex(img => img.el === dropped);
+            if (idx !== -1) {
+              currentIndex = idx;
+              updateAllPreviews();
+            }
+          });
+
+          beadImages.push({ x, y, el: dropped });
+          imageTexts.push("");
+
+          if (beadImages.length === 1) currentIndex = 0;
+
+          beadCircle.appendChild(dropped);
+          beadText.style.display = 'none';
+          beadSubText.style.display = 'none';
+
+          updateAllPreviews();
+          if (beadImages.length > 0) {nextButton.style.display = 'inline-block';}
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    document.querySelectorAll('.arrow-icon').forEach(icon => {
+      icon.addEventListener('click', () => {
+        const alt = icon.getAttribute('alt');
+        if (alt === 'up' && currentIndex > 0) currentIndex--;
+        else if (alt === 'down' && currentIndex < beadImages.length - 1) currentIndex++;
+        updateAllPreviews();
+      });
+    });
+
+    saveButton?.addEventListener('click', () => {
+      imageTexts[currentIndex] = textarea.value;
+    });
+
+    textarea?.addEventListener('input', () => {
+      counter.textContent = `${textarea.value.length}/500`;
+    });
+
+    document.getElementById('simulateNextButton')?.addEventListener('click', () => {
+      showOnly('section-end');
+    });
+  });
+</script>
+<footer style="
+  width: 100%;
+  text-align: center;
+  padding: 16px 0;
+  font-size: 14px;
+  color: #676767;
+  background-color: #171D24;
+  margin-top: 6px; 
+">
+  ©2025 Re:born · KBK 모든 권리 보유
+</footer>
+
+</body>
+</html>
+
+
+
+
